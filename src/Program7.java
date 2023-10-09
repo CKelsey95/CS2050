@@ -1,23 +1,24 @@
 /* Colton Kelsey
-    Program 6
+    Program 7
  */
 
 import java.io.*;
 import java.util.*;
 
 public class Program7 {
+    // creates indexes, all integer arrays + array list
     static int Intindex = 0;
     static int StrIndex = 0;
     static int[] bubbleIntArray = new int[20000];
     static int[] selectionIntArray = new int[20000];
     static int[] insertionIntArray = new int[20000];
     static ArrayList<Integer> ArrIntList = new ArrayList<>();
-
+    // creates all String arrays + array list
     static String[] bubbleStringArray = new String[10000];
     static String[] selectionStringArray = new String[10000];
     static String[] insertionStringArray = new String[10000];
     static ArrayList<String> ArrStringList = new ArrayList<>();
-
+    // creates variables for all sorting times
     static long bubbleIntTimeTotal;
     static long selectionIntTimeTotal;
     static long insertionIntTimeTotal;
@@ -31,7 +32,7 @@ public class Program7 {
         int n = bubbleIntArray.length;  // sets int to array length for sorting
         bubbleIntSort(bubbleIntArray, n);  // INT bubble sort operation
         selectionIntSort(selectionIntArray); // INT selection sort operations
-        insertIntSort(insertionIntArray);
+        insertIntSort(insertionIntArray);  // INT insertion sort opertations
 
         readFromStringFile();              // reads from file and stores into array
         int s = bubbleStringArray.length;  // sets int to array length for sorting
@@ -39,12 +40,13 @@ public class Program7 {
         int a = selectionStringArray.length; // sets int to array length for sorting
         selectStringSort(selectionStringArray, a); // STRING selection sort operation
         systemStringSort();             // string collections.sort method
-        insertStringSort(insertionStringArray);
+        insertStringSort(insertionStringArray);  // String insertion sort
 
-
+          // writes all time totals to file
         writeResultsToFile("src\\results.txt", bubbleIntTimeTotal, selectionIntTimeTotal, insertionIntTimeTotal,
                 bubbleStringTimeTotal, selectionStringTimeTotal, systemStringTimeTotal, insertionStringTimeTotal);
     }
+        // start of Integer sorting operations
     static void bubbleIntSort(int bubbleIntArray[],int n){
         long timeStart = System.nanoTime();
         int i, j, temp;
@@ -98,6 +100,7 @@ public class Program7 {
         long timeEnd = System.nanoTime();
         insertionIntTimeTotal = (timeEnd - timeStart);
     }
+    // start of String sorting operations
     static void bubbleStringSort(String bubbleStringArray[], int s) {
         String temp;
         long timeStart = System.nanoTime();
@@ -155,6 +158,7 @@ public class Program7 {
         long timeEnd = System.nanoTime();
         insertionStringTimeTotal = (timeEnd - timeStart);
     }
+    // reads from file to create integer arrays + array list
     static void readFromIntFile(){
         try {
             BufferedReader NumberFile = new BufferedReader(new FileReader("src\\NumbersInFile.txt"));
@@ -173,6 +177,7 @@ public class Program7 {
             System.out.println("Error reading the Int file: " + e.getMessage());
         }
     }
+    // reads from file to create String arrays + array list
     static void readFromStringFile(){
         try {
             BufferedReader StringFile = new BufferedReader(new FileReader("src\\StringsInFile.txt"));
@@ -189,6 +194,7 @@ public class Program7 {
             System.out.println("Error reading the String file: " + e.getMessage());
         }
     }
+    // writes results of all operations to file
     static void writeResultsToFile(String fileName, long bubbleIntTimeTotal, long selectionIntTimeTotal, long insertionIntTimeTotal,
                                    long bubbleStringTimeTotal, long selectStringTimeTotal,
                                    long systemStringTimeTotal, long insertionStringTimeTotal) {
@@ -204,7 +210,7 @@ public class Program7 {
             results.write("STRING: total system sort time is: " + systemStringTimeTotal + " nanoseconds\n");
             results.write("STRING: total insertion sort time is: " + insertionStringTimeTotal + " nanoseconds\n");
 
-            // Write the total array element counts
+            // Write the total elements from both files
             results.write("Total Integer Array Elements: " + Intindex + "\n");
             results.write("Total String Array Elements: " + StrIndex + "\n");
 
