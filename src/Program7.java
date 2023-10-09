@@ -30,19 +30,19 @@ public class Program7 {
     public static void main(String[] args) throws IOException {
         readFromIntFile();   // INT reads from file and stores into arrays
         int n = bubbleIntArray.length;  // sets int to array length for sorting
-        bubbleIntSort(bubbleIntArray, n);  // INT bubble sort operation
+        bubbleIntSort(bubbleIntArray,n);  // INT bubble sort operation
         selectionIntSort(selectionIntArray); // INT selection sort operations
         insertIntSort(insertionIntArray);  // INT insertion sort opertations
 
         readFromStringFile();              // reads from file and stores into array
         int s = bubbleStringArray.length;  // sets int to array length for sorting
-        bubbleStringSort(bubbleStringArray, s); // STRING bubble sort operation
+        bubbleStringSort(bubbleStringArray,s); // STRING bubble sort operation
         int a = selectionStringArray.length; // sets int to array length for sorting
-        selectStringSort(selectionStringArray, a); // STRING selection sort operation
+        selectStringSort(selectionStringArray,a); // STRING selection sort operation
         systemStringSort();             // string collections.sort method
         insertStringSort(insertionStringArray);  // String insertion sort
 
-          // writes all time totals to file
+        // writes all time totals to file
         writeResultsToFile("src\\results.txt", bubbleIntTimeTotal, selectionIntTimeTotal, insertionIntTimeTotal,
                 bubbleStringTimeTotal, selectionStringTimeTotal, systemStringTimeTotal, insertionStringTimeTotal);
     }
