@@ -7,7 +7,7 @@ import java.util.*;
 
 public class Program7 {
     // creates indexes, all integer arrays + array list
-    static int Intindex = 0;
+    static int IntIndex = 0;
     static int StrIndex = 0;
     static int[] bubbleIntArray = new int[20000];
     static int[] selectionIntArray = new int[20000];
@@ -166,10 +166,10 @@ public class Program7 {
             while ((line = NumberFile.readLine()) != null) { // only while file is not empty
                 int number = Integer.parseInt(line);
                 ArrIntList.add(number);
-                bubbleIntArray[Intindex] = number;
-                selectionIntArray[Intindex] = number;
-                insertionIntArray[Intindex] = number;
-                Intindex++;
+                bubbleIntArray[IntIndex] = number;
+                selectionIntArray[IntIndex] = number;
+                insertionIntArray[IntIndex] = number;
+                IntIndex++;
             }
             NumberFile.close();
         }
@@ -198,22 +198,18 @@ public class Program7 {
     static void writeResultsToFile(String fileName, long bubbleIntTimeTotal, long selectionIntTimeTotal, long insertionIntTimeTotal,
                                    long bubbleStringTimeTotal, long selectStringTimeTotal,
                                    long systemStringTimeTotal, long insertionStringTimeTotal) {
+        int listSize = ArrStringList.size();
         try {
             BufferedWriter results = new BufferedWriter(new FileWriter(fileName));
 
             // Write the time totals and array element counts to the file
-            results.write("INTEGER: total bubble sort time is: " + bubbleIntTimeTotal + " nanoseconds\n");
-            results.write("INTEGER: total selection sort time is: " + selectionIntTimeTotal + " nanoseconds\n");
-            results.write("INTEGER: total insertion sort time is: " +insertionIntTimeTotal + " nanoseconds\n");
-            results.write("STRING: total bubble sort time is: " + bubbleStringTimeTotal + " nanoseconds\n");
-            results.write("STRING: total select sort time is: " + selectStringTimeTotal + " nanoseconds\n");
-            results.write("STRING: total system sort time is: " + systemStringTimeTotal + " nanoseconds\n");
-            results.write("STRING: total insertion sort time is: " + insertionStringTimeTotal + " nanoseconds\n");
-
-            // Write the total elements from both files
-            results.write("Total Integer Array Elements: " + Intindex + "\n");
-            results.write("Total String Array Elements: " + StrIndex + "\n");
-
+            results.write("INTEGER: total bubble sort time is: " + bubbleIntTimeTotal + " nanoseconds with " + bubbleIntArray.length  + " elements\n");
+            results.write("INTEGER: total selection sort time is: " + selectionIntTimeTotal + " nanoseconds with " + selectionIntArray.length + " elements\n");
+            results.write("INTEGER: total insertion sort time is: " + insertionIntTimeTotal + " nanoseconds with " + insertionIntArray.length + " elements\n");
+            results.write("STRING: total bubble sort time is: " + bubbleStringTimeTotal + " nanoseconds with " + bubbleStringArray.length + " elements\n");
+            results.write("STRING: total select sort time is: " + selectStringTimeTotal + " nanoseconds with " + selectionStringArray.length + " elements\n");
+            results.write("STRING: total system sort time is: " + systemStringTimeTotal + " nanoseconds with " + listSize + " elements\n");
+            results.write("STRING: total insertion sort time is: " + insertionStringTimeTotal + " nanoseconds with " + insertionStringArray.length + " elements");
             // Close the writer
             results.close();
 
