@@ -1,0 +1,3 @@
+total nodes created: 9238
+tree height: 36
+max nodes possible: 68719476735
