@@ -4,7 +4,6 @@
 import java.io.*;
 
 public class Program8 {
-
     public static void main(String[] args) {
         BinarySearchTree tree = new BinarySearchTree();
         readFromFile(tree);
@@ -33,7 +32,6 @@ public class Program8 {
             root = null;
             nodeCount = 0;
         }
-
         // if tree is empty, create root, if not, use other method.
         public void insert(String data) {
             if (root == null) {
@@ -70,7 +68,6 @@ public class Program8 {
         private void inOrderRec(Node root) {
             if (root != null) {
                 inOrderRec(root.left);
-                System.out.println(root.data);
                 inOrderRec(root.right);
             }
         }
@@ -93,6 +90,10 @@ public class Program8 {
             int treeHeight = height();
             return (long) Math.pow(2, treeHeight) -1;
         }
+        public long nodeDifference(BinarySearchTree tree) {
+            long maxNodes = maxNodesPossible();
+            return maxNodes - tree.nodeCount;
+        }
     }
     //  reads from the file, removes bad characters, converts the remainder to lower case, triggers insert method
     static void readFromFile(BinarySearchTree tree) {
@@ -111,13 +112,14 @@ public class Program8 {
             System.out.println("Error While Reading File");
         }
     }
-    // this method writes total nodes, height, and max nodes possible to analysis file
+    // this method writes total nodes, height, max nodes possible, and difference between max nodes and created nodes
     static void writeToFile(BinarySearchTree tree) {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter("analysis.txt"));
             writer.write("total nodes created: " + tree.nodeCount);
             writer.write("\ntree height: " + tree.height());
             writer.write("\nmax nodes possible: " + tree.maxNodesPossible());
+            writer.write("\nmax nodes - created nodes: " + tree.nodeDifference(tree));
 
             writer.close();
         } catch (IOException e) {
