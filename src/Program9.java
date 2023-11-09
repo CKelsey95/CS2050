@@ -1,52 +1,79 @@
 /* Colton Kelsey
    Program 9
  */
-
-// Red Black Tree implementation in Java
-
 import java.io.*;
-
-// data structure that represents a node in the tree
 class Node {
     String data; // holds the key
     Node parent; // pointer to the parent
     Node left; // pointer to left child
     Node right; // pointer to right child
     int color; // 1 . Red, 0 . Black
+    int count = 0; // counter for each subsequent instance of the same word
 }
-
-
-// class RedBlackTree implements the operations in Red Black Tree
 public class Program9 {
     private Node root;
     private Node TNULL;
     public final int RED = 1;
     public final int BLACK = 0;
+    private int totalwordCount = 0;
 
-    private void preOrderHelper(Node node) {
+    BufferedWriter writer = new BufferedWriter(new FileWriter("rbtree.txt"));
+
+    // returns node count
+    public int wordCount(String key) {
+        Node node = searchTree(key);
         if (node != TNULL) {
-            System.out.print(node.data + " ");
+            return node.count;
+        } else {
+            return 0; // The word doesn't exist in the tree
+        }
+    }
+    // find tree height
+    public int treeHeight(Node node) {
+        if (node == TNULL) {
+            return 0;
+        } else {
+            int leftHeight = treeHeight(node.left);
+            int rightHeight = treeHeight(node.right);
+
+            return Math.max(leftHeight, rightHeight) + 1;
+        }
+    }
+    //  return height
+    public int getHeight() {
+        return treeHeight(root);
+    }
+    // finds max nodes if perfectly balanced
+    public long maxNodesPossible() {
+        int treeHeight = treeHeight(root);
+        return (long) Math.pow(2, treeHeight) -1;
+    }
+    // finds difference between perfectly balanced and real total
+    public long nodeDifference() {
+        long maxNodes = maxNodesPossible();
+        return maxNodes - totalwordCount;
+    }
+    private void preOrderHelper(Node node) throws IOException {
+        if (node != TNULL) {
+            writer.write(node.data + " ");
             preOrderHelper(node.left);
             preOrderHelper(node.right);
         }
     }
-
-    private void inOrderHelper(Node node) {
+    private void inOrderHelper(Node node) throws IOException {
         if (node != TNULL) {
             inOrderHelper(node.left);
-            System.out.print(node.data + " ");
+            writer.write(node.data + " ");
             inOrderHelper(node.right);
         }
     }
-
-    private void postOrderHelper(Node node) {
+    private void postOrderHelper(Node node) throws IOException {
         if (node != TNULL) {
             postOrderHelper(node.left);
             postOrderHelper(node.right);
-            System.out.print(node.data + " ");
+            writer.write(node.data + " ");
         }
     }
-
     private Node searchTreeHelper(Node node, String key) {
         // base case
         if (node == TNULL || key.equals(node.data)) {
@@ -60,8 +87,6 @@ public class Program9 {
         }
         return node;
     }
-
-    // fix the rb tree modified by the delete operation
     private void fixDelete(Node x) {
         Node s;
         while (x != root && x.color == BLACK) {
@@ -116,7 +141,7 @@ public class Program9 {
                         s.color = RED;
                         leftRotate(s);
                         s = x.parent.left;
-                    }
+                }
 
                     // case 3.4
                     s.color = x.parent.color;
@@ -129,8 +154,6 @@ public class Program9 {
         }
         x.color = BLACK;
     }
-
-
     private void rbTransplant(Node u, Node v){
         if (u.parent == null) {
             root = v;
@@ -141,7 +164,6 @@ public class Program9 {
         }
         v.parent = u.parent;
     }
-
     private void deleteNodeHelper(Node node, String key) {
         // find the node containing key
         Node z = TNULL;
@@ -192,8 +214,6 @@ public class Program9 {
             fixDelete(x);
         }
     }
-
-    // fix the red-black tree
     private void fixInsert(Node k){
         Node u;
         while (k.parent.color == RED) {
@@ -243,59 +263,43 @@ public class Program9 {
         }
         root.color = BLACK;
     }
-
-    private String printHelper(Node root, String indent, boolean last) {
-        // print the tree structure on the screen
-        if (root != TNULL) {
-            System.out.print(indent);
-            if (last) {
-                System.out.print("R----");
-                indent += "     ";
-            } else {
-                System.out.print("L----");
-                indent += "|    ";
+    private void printHelper(Node root, String prefix, boolean isTail, BufferedWriter writer, int level) throws IOException {
+        if (root != TNULL && level <= 3) {
+            writer.write(prefix + (isTail ? "R----" : "L----") + root.data + "(" + (root.color == 1 ? "RED" : "BLACK") + ")\n");
+            if (root.left != TNULL || root.right != TNULL) {
+                printHelper(root.left, prefix + (isTail ? "     " : "|    "), false, writer, level + 1);
+                printHelper(root.right, prefix + (isTail ? "     " : "|    "), true, writer, level + 1);
             }
-
-            String sColor = root.color == 1?"RED":"BLACK";
-            System.out.println(root.data + "(" + sColor + ")");
-            printHelper(root.left, indent, false);
-            printHelper(root.right, indent, true);
         }
-        return indent;
     }
-
-    public Program9() {
+    // setup initial values for tree
+    public Program9(String file) throws IOException {
         TNULL = new Node();
         TNULL.color = BLACK;
         TNULL.left = null;
         TNULL.right = null;
         root = TNULL;
     }
-
     // Pre-Order traversal
     // Node.Left Subtree.Right Subtree
-    public void preorder() {
+    public void preorder() throws IOException {
         preOrderHelper(this.root);
     }
-
     // In-Order traversal
     // Left Subtree . Node . Right Subtree
-    public void inorder() {
+    public void inorder() throws IOException {
         inOrderHelper(this.root);
     }
-
     // Post-Order traversal
     // Left Subtree . Right Subtree . Node
-    public void postorder() {
+    public void postorder() throws IOException {
         postOrderHelper(this.root);
     }
-
     // search the tree for the key k
     // and return the corresponding node
     public Node searchTree(String k) {
         return searchTreeHelper(this.root, k);
     }
-
     // find the node with the minimum key
     public Node minimum(Node node) {
         while (node.left != TNULL) {
@@ -303,7 +307,6 @@ public class Program9 {
         }
         return node;
     }
-
     // find the node with the maximum key
     public Node maximum(Node node) {
         while (node.right != TNULL) {
@@ -311,7 +314,6 @@ public class Program9 {
         }
         return node;
     }
-
     // find the successor of a given node
     public Node successor(Node x) {
         // if the right subtree is not null,
@@ -330,7 +332,6 @@ public class Program9 {
         }
         return y;
     }
-
     // find the predecessor of a given node
     public Node predecessor(Node x) {
         // if the left subtree is not null,
@@ -348,7 +349,6 @@ public class Program9 {
 
         return y;
     }
-
     // rotate left at node x
     public void leftRotate(Node x) {
         Node y = x.right;
@@ -367,7 +367,6 @@ public class Program9 {
         y.left = x;
         x.parent = y;
     }
-
     // rotate right at node x
     public void rightRotate(Node x) {
         Node y = x.left;
@@ -386,55 +385,59 @@ public class Program9 {
         y.right = x;
         x.parent = y;
     }
-
-    // insert the key to the tree in its appropriate position
-    // and fix the tree
+    // insert the key to the tree in its appropriate position, iterates wordcount on insertion
     public void insert(String key) {
-        // Ordinary Binary Search Insertion
-        Node node = new Node();
-        node.parent = null;
-        node.data = key;
-        node.left = TNULL;
-        node.right = TNULL;
-        node.color = RED; // new node must be red
-
-        Node y = null;
-        Node x = this.root;
-
-        while (x != TNULL) {
-            y = x;
-            if (node.data.compareTo(x.data) < 0) {
-                x = x.left;
-            } else {
-                x = x.right;
-            }
-        }
-
-        // y is parent of x
-        node.parent = y;
-        if (y == null) {
-            root = node;
-        } else if (node.data.compareTo(y.data) < 0) {
-            y.left = node;
+        Node existingNode = searchTree(key);
+        if (existingNode != TNULL) {
+            existingNode.count++; // Increment the count if the word already exists
         } else {
-            y.right = node;
-        }
+            // Ordinary Binary Search Insertion
+            Node node = new Node();
+            node.parent = null;
+            node.data = key;
+            node.left = TNULL;
+            node.right = TNULL;
+            node.color = RED; // new node must be red
+            node.count = 1; // Initialize the count for a new word
 
-        // if new node is a root node, simply return
-        if (node.parent == null){
-            node.color = BLACK;
-            return;
-        }
+            Node y = null;
+            Node x = this.root;
 
-        // if the grandparent is null, simply return
-        if (node.parent.parent == null) {
-            return;
-        }
+            while (x != TNULL) {
+                y = x;
+                if (node.data.compareTo(x.data) < 0) {
+                    x = x.left;
+                } else {
+                    x = x.right;
+                }
+            }
 
-        // Fix the tree
-        fixInsert(node);
+            // y is parent of x
+            node.parent = y;
+            if (y == null) {
+                root = node;
+            } else if (node.data.compareTo(y.data) < 0) {
+                y.left = node;
+            } else {
+                y.right = node;
+            }
+
+            // if new node is a root node, simply return
+            if (node.parent == null){
+                node.color = BLACK;
+                return;
+            }
+
+            // if the grandparent is null, simply return
+            if (node.parent.parent == null) {
+                return;
+            }
+
+            // Fix the tree
+            fixInsert(node);
+            totalwordCount++;
+        }
     }
-
     public Node getRoot(){
         return this.root;
     }
@@ -443,17 +446,16 @@ public class Program9 {
     public void deleteNode(String data) {
         deleteNodeHelper(this.root, data);
     }
-
-    // print the tree structure on the screen
-    public void prettyPrint() {
+    // print the tree structure
+    public void prettyPrint(BufferedWriter writer) {
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("rbtree.txt"));
-            writer.write(printHelper(this.root, "", true));
+            printHelper(this.root, "", true, writer, 1); // Start printing from level 1
             writer.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
+    // reads input file, cleans the data, calls insertion method, and iterates the total word count
     static void readFromFile(Program9 bst) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader("dracula.txt"));
@@ -463,6 +465,7 @@ public class Program9 {
                 for (String word : splitInput) {
                     String cleanString = word.toLowerCase();
                     bst.insert(cleanString);
+                    bst.totalwordCount++;
                 }
             }
             reader.close();
@@ -470,10 +473,35 @@ public class Program9 {
             System.out.println("Error While Reading File");
         }
     }
-
-    public static void main(String [] args){
-        Program9 bst = new Program9();
+    // writes height, count of "the", total real nodes, max nodes on perfectly balanced tree, and the difference between
+    // perfect max and real total nodes.
+    static void writeToFile(Program9 bst) {
+        int treeHeight = bst.getHeight();
+        int theCount = bst.wordCount("the");
+        int totalWordCount = bst.totalwordCount;
+        long nodeDifference = bst.nodeDifference();
+        long maxNodesPossible = bst.maxNodesPossible();
+        // writes results file
+        try (BufferedWriter resultWriter = new BufferedWriter(new FileWriter("results.txt"))) {
+            resultWriter.write("Tree Height: " + treeHeight);
+            resultWriter.newLine();
+            resultWriter.write("Count of 'the': " + theCount);
+            resultWriter.newLine();
+            resultWriter.write("Total Nodes in Tree: " + totalWordCount);
+            resultWriter.newLine();
+            resultWriter.write("Max Nodes if Perfectly Balanced: " + maxNodesPossible);
+            resultWriter.newLine();
+            resultWriter.write("Difference between Perfect Max and Real Total: " + nodeDifference);
+            resultWriter.newLine();
+        } catch (IOException e) {
+            System.out.println("Error while writing results.txt");
+        }
+    }
+    // main method calling
+    public static void main(String [] args) throws IOException {
+        Program9 bst = new Program9("rbtree.txt");
         readFromFile(bst);
-        bst.prettyPrint();
+        bst.prettyPrint(bst.writer);
+        writeToFile(bst);
     }
 }

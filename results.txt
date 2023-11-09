@@ -1,0 +1,5 @@
+Tree Height: 16
+Count of 'the': 7888
+Total Nodes in Tree: 176213
+Max Nodes if Perfectly Balanced: 65535
+Difference between Perfect Max and Real Total: -110678

@@ -1,1 +1,7 @@
-     
+R----of(BLACK)
+     L----dracula(RED)
+     |    L----by(BLACK)
+     |    R----in(BLACK)
+     R----seward(RED)
+          L----refresh(BLACK)
+          R----to(BLACK)
