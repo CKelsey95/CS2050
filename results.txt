@@ -1,0 +1,6 @@
+Sort Method    Time To Sort(nanoseconds)
+Bubble            589458700
+Insertion         33371400
+Selection         181738800
+Timsort           3362600
+Quicksort         3260000
