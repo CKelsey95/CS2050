@@ -7,7 +7,6 @@ class Node {
     Node right; // pointer to right child
     int color; // 1 . Red, 0 . Black
     int count = 0; // counter for each subsequent instance of the same word
-
 }
 public class Program11 {
     private Node root;
@@ -18,7 +17,6 @@ public class Program11 {
     private int hashTableSize;
     private Node[] hashTable;
     static String algoCount = "First";
-
 
     public Program11(String file) {
         this.hashTableSize = 89231;
@@ -91,15 +89,6 @@ public class Program11 {
         }
         root.color = BLACK;
     }
-
-    public int wordCount(String key) {
-        Node node = searchTree(key);
-        if (node != TNULL) {
-            return node.count;
-        } else {
-            return 0; // The word doesn't exist in the tree
-        }
-    }
     public void insertWithHash(String key, Node[] hashTable) {
         int hash = customHash(key, hashTable.length);
         int index = hash;
@@ -117,10 +106,12 @@ public class Program11 {
             newNode.count = 1;
             hashTable[nextIndex] = newNode;
 
+            // Insert the hashed value into the Red-Black tree
+            insert(key, key);
+
             totalwordCount++;
         }
     }
-
     public void rightRotate(Node x) {
         Node y = x.left;
         x.left = y.right;
@@ -197,7 +188,6 @@ public class Program11 {
                     x = x.right;
                 }
             }
-
             // y is parent of x
             node.parent = y;
             if (y == null) {
@@ -227,21 +217,17 @@ public class Program11 {
     public Node getRoot(){
         return this.root;
     }
-    private void updateHashTableCounter(int index, int count, Node[] hashTable) {
-        hashTable[index].count = count;
-    }
 
     private static double calculateLoadFactor(Node[] hashTable) {
         int uniqueWordCount = 0;
+
         for (Node node : hashTable) {
-            if (node != null) {
+            if (node != null && node.count > 0) {
                 uniqueWordCount++;
             }
         }
-
         return (double) uniqueWordCount / hashTable.length;
     }
-
     static void readFromFile(Program11 bst, Node[] hashTable) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader("dracula.txt"));
@@ -250,7 +236,7 @@ public class Program11 {
                 String[] splitInput = input.split("[^a-zA-Z]+");  // removes bad characters
                 for (String word : splitInput) {
                     String cleanString = word.toLowerCase();
-                    bst.insert(cleanString, cleanString);
+                    bst.insertWithHash(cleanString, hashTable);
                     bst.totalwordCount++;
                 }
             }
@@ -259,9 +245,9 @@ public class Program11 {
             System.out.println("Error While Reading File");
         }
     }
-
     private static void writeResultsToFile(int tableSize, double loadFactor, Node[] hashTable) {
         try (BufferedWriter resultWriter = new BufferedWriter(new FileWriter("results.txt", true))) {
+            resultWriter.write("hash value * 31, + ASCII value of character,then % table size \n");
             resultWriter.write("Hash Algorithm: " + algoCount + "\n");
             resultWriter.write("Hash Table Size: " + tableSize + "\n");
             resultWriter.write("Load Factor: " + loadFactor + "\n");
@@ -272,13 +258,8 @@ public class Program11 {
     }
     public static void main(String[] args) throws IOException {
         Program11 bst = new Program11("dracula.txt");
-
-        // Read from file and insert into both Red-Black tree and hash table
         readFromFile(bst, bst.hashTable);
-
-        // Write results for the initial hash table size
         writeResultsToFile(bst.hashTableSize, calculateLoadFactor(bst.hashTable), bst.hashTable);
-
         // Repeat with a different hash table size
         int newHashTableSize = 449171; // Another prime number
         bst.hashTableSize = newHashTableSize;

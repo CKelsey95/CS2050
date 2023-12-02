@@ -1,0 +1,10 @@
+hash value * 31, + ASCII value of character,then % table size 
+Hash Algorithm: First
+Hash Table Size: 89231
+Load Factor: 0.11641694030101646
+
+hash value * 31, + ASCII value of character,then % table size 
+Hash Algorithm: Second
+Hash Table Size: 449171
+Load Factor: 0.021038758067640165
+
