@@ -1,0 +1,30 @@
+HashMap with Default Constructor
+
+HashMap Size: 9238
+Total Time: 112661900 nanoseconds 
+Node Count: 166977
+Load Factor: .75 
+-----------------------------
+Hashmap with Initial Capacity 10000 and LF of 0.75
+
+HashMap Size: 9238
+Total Time: 83591900 nanoseconds 
+Node Count: 333954
+Load Factor: .75 
+-----------------------------
+Hashmap with Initial Capacity 20000 and LF of 0.75
+
+HashMap Size: 9238
+Total Time: 97213300 nanoseconds 
+Node Count: 500931
+Load Factor: .75 
+-----------------------------
+Program 11 Results
+
+Hash Algorithm: First
+Hash Table Size: 89231
+Load Factor: 0.11641694030101646 
+
+Hash Algorithm: Second 
+Hash Table Size: 449171
+Load Factor: 0.021038758067640165 
